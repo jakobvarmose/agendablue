@@ -1,0 +1,53 @@
+version: "3.2"
+volumes:
+  data:
+services:
+  agendablue:
+    image: jakobvarmose/agendablue:latest
+    #ports:
+      #-
+      #  target: 8041
+      #  published: 8041
+      #  protocol: tcp
+      #  mode: host
+    deploy:
+      replicas: 2
+    networks:
+      - web
+      - back
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: test
+      DB_NAME: cryptouser2
+    labels:
+      traefik.enable: 'true'
+      traefik.docker.network: 'web'
+      traefik.frontend.rule: 'Host:agenda.blue'
+      traefik.port: '8041'
+
+      traefik.frontend.headers.customResponseHeaders: >-
+        || Content-Security-Policy:
+        default-src 'self';
+        script-src 'self' 'unsafe-eval';
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self'  https://fonts.gstatic.com;
+
+        || Referrer-Policy: no-referrer
+        || Strict-Transport-Security: max-age=31536000
+        || X-Content-Type-Options: nosniff
+        || X-Frame-Options: DENY
+        || X-XSS-Protection: 1; mode=block
+  db:
+    image: mariadb:latest
+    volumes:
+      - data:/var/lib/mysql
+    networks:
+      - back
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: cryptouser2
+networks:
+  back:
+  web:
+    external: true
