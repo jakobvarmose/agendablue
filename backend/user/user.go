@@ -9,7 +9,7 @@ type User struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 
-	Username string `gorm:"unique"`
+	Username string `gorm:"type:varchar(100);unique"`
 
 	AccessKey  []byte
 	ContentKey []byte

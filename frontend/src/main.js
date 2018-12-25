@@ -7,6 +7,7 @@ import axios from 'axios';
 
 import 'vuetify/dist/vuetify.min.css';
 import 'material-design-icons-iconfont/dist/material-design-icons.css';
+import 'typeface-roboto';
 import 'dayspan-vuetify/dist/lib/dayspan-vuetify.min.css';
 
 import { Session } from '@/plugins/cryptouser';
