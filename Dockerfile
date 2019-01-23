@@ -6,12 +6,10 @@ COPY frontend/ ./
 RUN npm run build
 
 FROM golang:latest as backend
+RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 WORKDIR /go/src/github.com/jakobvarmose/agendablue/backend/
-RUN go get \
-    github.com/go-sql-driver/mysql \
-    github.com/jinzhu/gorm \
-    github.com/whyrusleeping/cbor/go \
-    golang.org/x/crypto/nacl/sign
+COPY backend/Gopkg.* ./
+RUN dep ensure --vendor-only
 COPY backend/ ./
 RUN CGO_ENABLED=0 go build -o /root/app
 
